@@ -2,7 +2,6 @@ package com.fc8.projectboard.repository;
 
 import com.fc8.projectboard.config.JpaConfig;
 import com.fc8.projectboard.domain.Article;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("testdb")
 @DisplayName("JPA 연결 테스트")
