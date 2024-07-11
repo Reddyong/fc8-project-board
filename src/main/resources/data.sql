@@ -1,3 +1,18 @@
+alter table article modify title varchar(255) after id;
+alter table article modify content varchar(10000) after title;
+alter table article modify hashtag varchar(255) after content;
+alter table article modify created_at datetime after hashtag;
+alter table article modify created_by varchar(100) after created_at;
+alter table article modify modified_at datetime after created_by;
+alter table article modify modified_by varchar(100) after modified_at;
+
+alter table comment modify article_id bigint after id;
+alter table comment modify content varchar(500) after article_id;
+alter table comment modify created_at datetime after content;
+alter table comment modify created_by varchar(100) after created_at;
+alter table comment modify modified_at datetime after created_by;
+alter table comment modify modified_by varchar(100) after modified_at;
+
 insert into article (title, content, hashtag, created_at, created_by, modified_at, modified_by) values ('Integer tincidunt ante vel ipsum.', 'Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.', 'Orange', '2023-07-23 21:50:49', 'Hasty', '2023-08-19 03:08:20', 'Blaine');
 insert into article (title, content, hashtag, created_at, created_by, modified_at, modified_by) values ('Vestibulum sed magna at nunc commodo placerat.', 'Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.', 'Mauv', '2023-10-24 19:26:47', 'Baxie', '2023-07-20 10:03:00', 'Duffie');
 insert into article (title, content, hashtag, created_at, created_by, modified_at, modified_by) values ('Aenean auctor gravida sem.', 'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.', 'Orange', '2024-01-19 21:25:21', 'Berkeley', '2023-12-26 22:20:50', 'Eartha');
@@ -1102,3 +1117,5 @@ insert into comment (article_id, content, created_at, created_by, modified_at, m
 insert into comment (article_id, content, created_at, created_by, modified_at, modified_by) values (82, 'Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.', '2024-07-09 16:23:28', 'Leontyne', '2024-01-22 18:27:21', 'Stanford');
 insert into comment (article_id, content, created_at, created_by, modified_at, modified_by) values (78, 'Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.', '2024-05-24 14:04:37', 'Brandtr', '2024-05-08 16:32:31', 'Had');
 insert into comment (article_id, content, created_at, created_by, modified_at, modified_by) values (65, 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', '2023-11-20 20:42:30', 'Gavrielle', '2024-05-06 14:02:15', 'Tamar');
+
+
