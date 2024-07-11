@@ -26,9 +26,6 @@ spring:
         default_batch_fetch_size: 100
 #        dialect: org.hibernate.dialect.MySQLDialect
 
-  h2:
-    console:
-      enabled: false
   sql:
     init:
       mode: always
