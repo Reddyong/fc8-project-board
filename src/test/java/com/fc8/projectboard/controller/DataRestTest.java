@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,6 +83,26 @@ public class DataRestTest {
         mockMvc.perform(get("/api/comments/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.valueOf("application/hal+json")));
+    }
+
+    @DisplayName(value = "[api] 회원 관련 API 는 일체 제공하지 않는다.")
+    @Test
+    void givenNothing_whenRequestingUserAccounts_thenThrowException() throws Exception {
+        // given
+
+        // when, then
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(post("/api/users"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(put("/api/users"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(patch("/api/users"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(delete("/api/users"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(head("/api/users"))
+                .andExpect(status().isNotFound());
     }
 
 }
