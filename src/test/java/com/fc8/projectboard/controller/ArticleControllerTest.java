@@ -38,7 +38,6 @@ public class ArticleControllerTest {
 
     }
 
-    @Disabled(value = "구현 중")
     @DisplayName("[view][Get] 게시글 상세 페이지 - 정상 호출")
     @Test
     void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
