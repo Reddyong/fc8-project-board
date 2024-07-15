@@ -2,6 +2,7 @@ package com.fc8.projectboard.repository;
 
 import com.fc8.projectboard.config.JpaConfig;
 import com.fc8.projectboard.domain.Article;
+import com.fc8.projectboard.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,16 @@ class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     public JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
-            @Autowired CommentRepository commentRepository
+            @Autowired CommentRepository commentRepository,
+            @Autowired UserRepository userRepository
     ) {
         this.articleRepository = articleRepository;
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
     }
 
     @DisplayName("select test")
@@ -49,9 +53,11 @@ class JpaRepositoryTest {
     void givenTestData_whenInserting_thenWorksFine() {
         // given
         long prevCount = articleRepository.count();
+        User user = userRepository.save(User.of("reddyong", "password", null, null, null));
+        Article article = Article.of(user, "new article", "new content", "#newtag");
 
         // when
-        Article savedArticle = articleRepository.save(Article.of("new article", "new content", "#newtag"));
+        articleRepository.save(article);
 
         // then
         assertThat(articleRepository.count())
