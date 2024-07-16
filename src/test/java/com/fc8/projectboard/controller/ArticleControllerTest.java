@@ -99,12 +99,14 @@ public class ArticleControllerTest {
 
     }
 
-    @DisplayName("[view][Get] 게시글 상세 페이지 - 정상 호출")
+    @DisplayName("[view][Get] 게시글 페이지 - 정상 호출")
     @Test
     void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         // given
         Long articleId = 1L;
+        Long totalCount = 1L;
         given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentDto());
+        given(articleService.getArticleCount()).willReturn(totalCount);
 
         // when, then
         mockMvc.perform(get("/articles/" + articleId))
@@ -112,9 +114,11 @@ public class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("comments"));
+                .andExpect(model().attributeExists("comments"))
+                .andExpect(model().attribute("totalCount", totalCount));
 
         then(articleService).should().getArticle(articleId);
+        then(articleService).should().getArticleCount();
     }
 
     @Disabled(value = "구현 중")

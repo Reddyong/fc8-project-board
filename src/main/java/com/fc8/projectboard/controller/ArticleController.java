@@ -55,9 +55,9 @@ public class ArticleController {
         ArticleWithCommentsDto articleWithCommentsDto = articleService.getArticle(articleId);
         ArticleWithCommentResponse articleWithCommentResponse = ArticleWithCommentResponse.from(articleWithCommentsDto);
 
-
         modelMap.addAttribute("article", articleWithCommentResponse);
         modelMap.addAttribute("comments", articleWithCommentResponse.commentsResponse());
+        modelMap.addAttribute("totalCount", articleService.getArticleCount());
         return "articles/detail";
     }
 }
