@@ -9,18 +9,15 @@ import com.fc8.projectboard.repository.ArticleRepository;
 import com.fc8.projectboard.repository.CommentRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -119,7 +116,7 @@ class CommentServiceTest {
     void givenNonexistentComment_whenUpdatingComment_thenLogsWarningAndDoesNothing() {
         // given
         CommentDto dto = createCommentDto("댓글");
-        given(commentRepository.getReferenceById(dto.id())).willThrow(EntityExistsException.class);
+        given(commentRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);
 
         // when
         commentService.updateComment(dto);
