@@ -169,6 +169,22 @@ class ArticleServiceTest {
 
     }
 
+    @DisplayName(value = "게시글 수를 조회하면, 게시글 수를 반환한다.")
+    @Test
+    void givenNothing_whenCountingArticles_thenReturnsArticleCount() {
+        // given
+        Long expected = 0L;
+        given(articleRepository.count()).willReturn(expected);
+
+        // when
+        Long actual = articleService.getArticleCount();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+        then(articleRepository).should().count();
+
+    }
+
     private User createUser() {
         return User.of(
                 "reddyong",
