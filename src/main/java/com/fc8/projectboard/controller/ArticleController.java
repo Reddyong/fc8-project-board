@@ -48,9 +48,9 @@ public class ArticleController {
 
     @GetMapping(path = "/{article-id}")
     public String articles(
-            ModelMap modelMap,
             @PathVariable(name = "article-id")
-            Long articleId
+            Long articleId,
+            ModelMap modelMap
     ) {
 
         ArticleWithCommentsDto articleWithCommentsDto = articleService.getArticle(articleId);
@@ -60,5 +60,24 @@ public class ArticleController {
         modelMap.addAttribute("comments", articleWithCommentResponse.commentsResponse());
         modelMap.addAttribute("totalCount", articleService.getArticleCount());
         return "articles/detail";
+    }
+
+    @GetMapping(path = "/search-hashtag")
+    public String searchHashtag(
+            @RequestParam(required = false) String searchValue,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+            Pageable pageable,
+            ModelMap modelMap
+    ) {
+        Page<ArticleResponse> articles = articleService.searchArticlesViaHashtag(searchValue, pageable).map(ArticleResponse::from);
+        List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+        List<String> hashtags = articleService.getHashtags();
+
+        modelMap.addAttribute("articles", articles);
+        modelMap.addAttribute("paginationBarNumbers", barNumbers);
+        modelMap.addAttribute("hashtags", hashtags);
+        modelMap.addAttribute("searchType", SearchType.HASHTAG);
+
+        return "articles/search-hashtag";
     }
 }
