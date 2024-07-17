@@ -1,4 +1,4 @@
-package com.fc8.projectboard.domain.type;
+package com.fc8.projectboard.domain.constant;
 
 import lombok.Getter;
 

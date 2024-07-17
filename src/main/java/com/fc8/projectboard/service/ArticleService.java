@@ -1,10 +1,12 @@
 package com.fc8.projectboard.service;
 
 import com.fc8.projectboard.domain.Article;
-import com.fc8.projectboard.domain.type.SearchType;
+import com.fc8.projectboard.domain.User;
+import com.fc8.projectboard.domain.constant.SearchType;
 import com.fc8.projectboard.dto.ArticleDto;
 import com.fc8.projectboard.dto.ArticleWithCommentsDto;
 import com.fc8.projectboard.repository.ArticleRepository;
+import com.fc8.projectboard.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
@@ -41,20 +44,29 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public ArticleWithCommentsDto getArticle(Long articleId) {
+    public ArticleWithCommentsDto getArticleWithComments(Long articleId) {
         return articleRepository.findById(articleId)
                 .map(ArticleWithCommentsDto::from)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
     }
 
+    @Transactional(readOnly = true)
+    public ArticleDto getArticle(Long articleId) {
+        return articleRepository.findById(articleId)
+                .map(ArticleDto::from)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
+    }
+
     public void saveArticle(ArticleDto articleDto) {
-        articleRepository.save(articleDto.toEntity());
+        User user = userRepository.getReferenceById(articleDto.userDto().id());
+
+        articleRepository.save(articleDto.toEntity(user));
     }
 
 
-    public void updateArticle(ArticleDto articleDto) {
+    public void updateArticle(Long articleId, ArticleDto articleDto) {
         try {
-            Article article = articleRepository.getReferenceById(articleDto.id());
+            Article article = articleRepository.getReferenceById(articleId);
 
             if (articleDto.title() != null) {
                 article.setTitle(articleDto.title());
