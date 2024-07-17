@@ -91,7 +91,7 @@ public class ArticleController {
     public String postNewArticle(ArticleRequest articleRequest) {
         // TODO : 인증 정보를 넣어줘야 한다. -> 강의에서는 userId 를 PK 로 사용하고 있지만, 나는 auto increment 한 id 를 PK로 가지기 때문에 id 값 찾아오는 과정도 필요
 
-        articleService.saveArticle(articleRequest.toDto(UserDto.of(1L, "reddyong", "reddyong", "reddyong@email.com", "Reddyong", "memo", null, null, null, null)));
+        articleService.saveArticle(articleRequest.toDto(UserDto.of(1L, "reddyong", "reddyong", "reddyong@email.com", "Reddyong", "memo")));
 
         return "redirect:/articles";
     }
@@ -110,7 +110,7 @@ public class ArticleController {
     public String updateArticle(@PathVariable Long articleId, ArticleRequest articleRequest) {
         // TODO : 인증 정보를 넣어줘야 한다.
         articleService.updateArticle(articleId, articleRequest.toDto(UserDto.of(
-                1L, "reddyong", "reddyong", "reddyong@email.com", "reddyong", "memo", null, null, null, null
+                1L, "reddyong", "reddyong", "reddyong@email.com", "reddyong", "memo"
         )));
 
         return "redirect:/articles/" + articleId;
