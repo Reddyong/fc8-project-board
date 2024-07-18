@@ -1,5 +1,5 @@
 insert into users (user_id, password, nickname, email, memo, created_at, created_by, modified_at, modified_by)
-values ('reddyong', 'reddyong1234', 'reddyong', 'reddyong@email.com', 'I am reddyong.', '2023-07-20 10:03:00', 'reddyong', '2023-07-20 10:03:00', 'reddyong');
+values ('reddyong', '{noop}reddyong1234', 'reddyong', 'reddyong@email.com', 'I am reddyong.', '2023-07-20 10:03:00', 'reddyong', '2023-07-20 10:03:00', 'reddyong');
 
 insert into article (user_id, title, content, hashtag, created_at, created_by, modified_at, modified_by) values (1, 'Ut at dolor quis odio consequat varius.', 'In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.', '#Maroon', '2023-08-03 05:51:27', 'Joe', '2023-08-28 18:30:49', 'Kimberlyn');
 insert into article (user_id, title, content, hashtag, created_at, created_by, modified_at, modified_by) values (1, 'Proin eu mi.', 'In congue. Etiam justo. Etiam pretium iaculis justo.', null, '2024-05-23 15:17:39', 'Itch', '2024-03-19 23:46:09', 'Rourke');
