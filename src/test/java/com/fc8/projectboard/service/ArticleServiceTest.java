@@ -9,6 +9,7 @@ import com.fc8.projectboard.dto.UserDto;
 import com.fc8.projectboard.repository.ArticleRepository;
 import com.fc8.projectboard.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
+@Slf4j
 @DisplayName(value = "비즈니스 로직 - 게시글")
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
@@ -201,6 +203,7 @@ class ArticleServiceTest {
         Article article = createArticle();
         ArticleDto dto = createArticleDto("new title", "new content", "#springboot");
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
+        given(userRepository.getReferenceById(dto.userDto().id())).willReturn(dto.userDto().toEntity());
 
         // when
         articleService.updateArticle(dto.id(), dto);
@@ -211,6 +214,7 @@ class ArticleServiceTest {
                 .hasFieldOrPropertyWithValue("content", dto.content())
                 .hasFieldOrPropertyWithValue("hashtag", dto.hashtag());
         then(articleRepository).should().getReferenceById(dto.id());
+        then(userRepository).should().getReferenceById(dto.userDto().id());
 
     }
 
@@ -234,13 +238,14 @@ class ArticleServiceTest {
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
         // given
         Long articleId = 1L;
-        willDoNothing().given(articleRepository).deleteById(articleId);
+        String userId = "reddyong";
+        willDoNothing().given(articleRepository).deleteByIdAndUserUserId(articleId, userId);
 
         // when
-        articleService.deleteArticle(1L);
+        articleService.deleteArticle(1L, userId);
 
         // then
-        then(articleRepository).should().deleteById(articleId);
+        then(articleRepository).should().deleteByIdAndUserUserId(articleId, userId);
 
     }
 

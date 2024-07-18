@@ -1,6 +1,6 @@
 package com.fc8.projectboard.controller;
 
-import com.fc8.projectboard.config.SecurityConfig;
+import com.fc8.projectboard.config.TestSecurityConfig;
 import com.fc8.projectboard.dto.CommentDto;
 import com.fc8.projectboard.dto.request.CommentRequest;
 import com.fc8.projectboard.service.CommentService;
@@ -12,8 +12,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Map;
 
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @DisplayName(value = "View 컨트롤러 - 댓글")
-@Import(value = {SecurityConfig.class, FormDataEncoder.class})
+@Import(value = {TestSecurityConfig.class, FormDataEncoder.class})
 @WebMvcTest(CommentController.class)
 class CommentControllerTest {
 
@@ -46,6 +47,7 @@ class CommentControllerTest {
         this.formDataEncoder = formDataEncoder;
     }
 
+    @WithUserDetails(value = "reddyongTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName(value = "[view][POST] 댓글 등록 - 정상 호출")
     @Test
     void givenCommentInfo_whenRequesting_thenSavesNewComment() throws Exception {
@@ -68,14 +70,16 @@ class CommentControllerTest {
         then(commentService).should().saveComment(any(CommentDto.class));
     }
 
-    @DisplayName(value = "[view][POST]")
+    @WithUserDetails(value = "reddyongTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName(value = "[view][POST] 댓글 삭제 - 정상 호출")
     @Test
     void givenCommentIdToDelete_whenRequesting_thenDeletesComment() throws Exception {
         // given
         Long articleId = 1L;
         Long commentId = 1L;
+        String userId = "reddyongTest";
 
-        willDoNothing().given(commentService).deleteComment(commentId);
+        willDoNothing().given(commentService).deleteComment(commentId, userId);
 
         // when, then
         mockMvc.perform(post("/comments/" + commentId + "/delete")
@@ -87,7 +91,7 @@ class CommentControllerTest {
                 .andExpect(view().name("redirect:/articles/" + articleId))
                 .andExpect(redirectedUrl("/articles/" + articleId));
 
-        then(commentService).should().deleteComment(commentId);
+        then(commentService).should().deleteComment(commentId, userId);
 
     }
 

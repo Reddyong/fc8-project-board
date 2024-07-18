@@ -1,9 +1,13 @@
 package com.fc8.projectboard.config;
 
+import com.fc8.projectboard.dto.security.BoardPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
@@ -13,7 +17,11 @@ public class JpaConfig {
 
     @Bean
     public AuditorAware<String> auditorAware() {
-        // TODO : Spring Security 로 인증 기능을 붙이게 될 때, 수정해야 함
-        return () -> Optional.of("reddyong");   // Jpa auditing 을 할 때 들어가는 사람 이름에 대한 임의로 들어가는 이름 설정
+        return () -> Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .filter(Authentication::isAuthenticated)
+                .map(Authentication::getPrincipal)
+                .map(BoardPrincipal.class::cast)
+                .map(BoardPrincipal::getUsername);   // Jpa auditing 을 할 때 들어가는 사람 이름에 대한 임의로 들어가는 이름 설정
     }
 }
