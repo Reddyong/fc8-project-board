@@ -7,7 +7,7 @@ import com.fc8.projectboard.dto.CommentDto;
 import com.fc8.projectboard.dto.UserDto;
 import com.fc8.projectboard.repository.ArticleRepository;
 import com.fc8.projectboard.repository.CommentRepository;
-import jakarta.persistence.EntityExistsException;
+import com.fc8.projectboard.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,6 +36,9 @@ class CommentServiceTest {
     @Mock
     private ArticleRepository articleRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
     @DisplayName(value = "게시글 ID 로 조회하면, 해당하는 댓글 리스트를 반환한다.")
     @Test
     void givenArticleId_whenSearchComments_thenReturnsComments() {
@@ -60,7 +63,7 @@ class CommentServiceTest {
         // given
         CommentDto dto = createCommentDto("댓글");
         given(articleRepository.getReferenceById(dto.articleId())).willReturn(createArticle());
-
+        given(userRepository.getReferenceById(dto.userDto().id())).willReturn(createUser());
         given(commentRepository.save(any(Comment.class))).willReturn(null);
 
         // when
@@ -68,6 +71,7 @@ class CommentServiceTest {
 
         // then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userRepository).should().getReferenceById(dto.userDto().id());
         then(commentRepository).should().save(any(Comment.class));
 
     }
@@ -84,6 +88,7 @@ class CommentServiceTest {
 
         // then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userRepository).shouldHaveNoInteractions();
         then(commentRepository).shouldHaveNoInteractions();
 
     }

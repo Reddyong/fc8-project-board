@@ -1,9 +1,12 @@
 package com.fc8.projectboard.service;
 
+import com.fc8.projectboard.domain.Article;
 import com.fc8.projectboard.domain.Comment;
+import com.fc8.projectboard.domain.User;
 import com.fc8.projectboard.dto.CommentDto;
 import com.fc8.projectboard.repository.ArticleRepository;
 import com.fc8.projectboard.repository.CommentRepository;
+import com.fc8.projectboard.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<CommentDto> searchComments(Long articleId) {
@@ -29,9 +33,13 @@ public class CommentService {
 
     public void saveComment(CommentDto commentDto) {
         try {
-            commentRepository.save(commentDto.toEntity(articleRepository.getReferenceById(commentDto.articleId())));
+            Article article = articleRepository.getReferenceById(commentDto.articleId());
+            User user = userRepository.getReferenceById(commentDto.userDto().id());
+
+            commentRepository.save(commentDto.toEntity(article, user));
+
         } catch (EntityNotFoundException e) {
-            log.warn("댓글 저장 실패. 댓글의 게시글을 찾을 수 없습니다. - dto : {}", commentDto);
+            log.warn("댓글 저장 실패. 댓글 작성에 필요한 정보를 찾을 수 없습니다. - dto : {}", e.getLocalizedMessage());
         }
     }
 
