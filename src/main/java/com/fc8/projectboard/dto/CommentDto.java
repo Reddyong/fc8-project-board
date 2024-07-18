@@ -2,6 +2,7 @@ package com.fc8.projectboard.dto;
 
 import com.fc8.projectboard.domain.Article;
 import com.fc8.projectboard.domain.Comment;
+import com.fc8.projectboard.domain.User;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,10 @@ public record CommentDto(
         LocalDateTime modifiedAt,
         String modifiedBy
 ) {
+    public static CommentDto of(Long articleId, UserDto userDto, String content) {
+        return new CommentDto(null, articleId, userDto, content, null, null, null, null);
+    }
+
     public static CommentDto of(Long id, Long articleId, UserDto userDto, String content, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy) {
         return new CommentDto(id, articleId, userDto, content, createdAt, createdBy, modifiedAt, modifiedBy);
     }
@@ -32,10 +37,10 @@ public record CommentDto(
         );
     }
 
-    public Comment toEntity(Article article) {
+    public Comment toEntity(Article article, User user) {
         return Comment.of(
                 article,
-                userDto.toEntity(),
+                user,
                 content
         );
     }
