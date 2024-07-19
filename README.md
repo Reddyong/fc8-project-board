@@ -34,7 +34,7 @@ Spring Boot
 
 ## 데모 페이지
 
-(작성 중)
+* https://fc8-project-board-reddyong-fa11508ebada.herokuapp.com/
 
 ## 질문, 건의
 
